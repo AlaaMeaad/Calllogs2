@@ -1,4 +1,4 @@
-package AlaaMeaad.calllogs;
+package alaaMeaad.calllogs;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.icu.text.SimpleDateFormat;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
@@ -23,16 +22,16 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import AlaaMeaad.calllogs.api.ApiServers;
-import okhttp3.RequestBody;
+import alaaMeaad.calllogs.api.ApiServers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static AlaaMeaad.calllogs.api.ApiClient.getClient;
+import static alaaMeaad.calllogs.api.ApiClient.getClient;
 
 public class MainActivity extends AppCompatActivity {
     ApiServers apiServers;
@@ -114,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
         String strOrder = android.provider.CallLog.Calls.DATE + " DESC";
 
         Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+        DateFormat simpleDateFormat = new java.text.SimpleDateFormat("yyyy-MMM-dd");
+//        DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MMM-dd");
         String formattedDate = simpleDateFormat.format(c);
         Log.e("date" , "ssss" + formattedDate);
         Date newDate = new Date(c.getTime() - 86400000L); // 7 * 24 * 60 * 60 * 1000

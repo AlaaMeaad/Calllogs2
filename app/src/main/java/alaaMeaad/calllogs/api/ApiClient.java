@@ -1,4 +1,4 @@
-package AlaaMeaad.calllogs.api;
+package alaaMeaad.calllogs.api;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

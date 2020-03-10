@@ -1,4 +1,4 @@
-package AlaaMeaad.calllogs;
+package alaaMeaad.calllogs;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

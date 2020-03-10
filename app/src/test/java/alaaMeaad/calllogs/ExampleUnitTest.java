@@ -1,4 +1,4 @@
-package AlaaMeaad.calllogs;
+package alaaMeaad.calllogs;
 
 import org.junit.Test;
 
