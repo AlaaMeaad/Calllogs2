@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
     TextView textView;
+    Button button;
     StringBuffer sb;
     Gson gson;
     public static MainActivity mainActivity ;
@@ -68,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
         Intent alarmIntent = new Intent(this, MyBroadCastReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         startAlarm();
+        button = (Button) findViewById(R.id.btn_send_data);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allFilds();
+            }
+        });
+
     }
 
 

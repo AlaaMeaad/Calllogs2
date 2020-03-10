@@ -34,7 +34,7 @@ public class MyService extends IntentService {
         Intent alarmIntent = new Intent(this, MyBroadCastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
 //        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, 0, 1000, pendingIntent);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),  1000*60 , pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),  1000*60*200 , pendingIntent);
     }
 }
 
