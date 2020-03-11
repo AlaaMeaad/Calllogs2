@@ -28,4 +28,26 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+ext {
+    minSdkVersion = 19
+    targetSdkVersion = 29
+    compileSdkVersion = 29
 
+    // App dependencies
+    androidXVersion = '1.0.0'
+    androidXTestCoreVersion = '1.2.0'
+    androidXTestExtKotlinRunnerVersion = '1.1.1'
+    androidXTestRulesVersion = '1.2.0-beta01'
+    androidXAnnotations = '1.0.1'
+    androidXLegacySupport = '1.0.0'
+    appCompatVersion = '1.0.2'
+    junitVersion = '4.12'
+    materialVersion = '1.0.0'
+    recyclerViewVersion = '1.0.0'
+    nav_version = '2.1.0'
+    retrofit_version = '2.6.2'
+    okhttp3_version = '3.4.1'
+    gson_vesion = '2.8.5'
+    intuit = '1.0.6'
+    butterknife = '10.1.0'
+}
