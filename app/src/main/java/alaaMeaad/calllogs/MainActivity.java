@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
@@ -29,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import alaaMeaad.calllogs.api.ApiServers;
+import alaaMeaad.calllogs.service.Foregroungservice;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,16 +36,22 @@ import retrofit2.Response;
 import static alaaMeaad.calllogs.api.ApiClient.getClient;
 
 public class MainActivity extends AppCompatActivity {
-    ApiServers apiServers;
-    AlarmManager alarmManager;
+    public ApiServers apiServers;
+    public AlarmManager alarmManager;
     PendingIntent pendingIntent;
-    TextView textView;
-    Button button;
-    StringBuffer sb;
+    public TextView textView;
+    public Button button;
+    public StringBuffer sb;
     Gson gson;
     public static MainActivity mainActivity ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Intent serviceIntet = new Intent(this, Foregroungservice.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntet);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainActivity = this;
@@ -83,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void startAlarm() {
+    public void startAlarm() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
