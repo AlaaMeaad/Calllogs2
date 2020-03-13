@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntet);
         }
+        else {
+            startService(serviceIntet);
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
